@@ -2,122 +2,256 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>蜜雪核销 | MIXUE Redemption</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>蜜雪冰城 20%OFF 优惠券 | MIXUE 20% Off Coupon</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs2@0.0.2/qrcode.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
+            background: linear-gradient(135deg, #ff4d4d 0%, #ff7777 100%);
             font-family: 'Arial', sans-serif;
-            background: #f5f5f5;
-            display: flex; flex-direction: column; align-items: center;
-            justify-content: center; min-height: 100vh; padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
         }
-        .container {
-            background: white; border-radius: 20px; padding: 30px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-            max-width: 380px; width: 100%; text-align: center;
+        .coupon {
+            background: white;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+            text-align: center;
         }
-        .header { font-size: 22px; font-weight: bold; color: #c0392b; margin-bottom: 20px; }
-        .info {
-            background: #fff8f8; border-radius: 12px; padding: 16px;
-            text-align: left; margin: 15px 0; line-height: 1.8;
+        .coupon-header {
+            background: linear-gradient(180deg, #e63946 0%, #c0392b 100%);
+            padding: 24px 20px 20px;
+            position: relative;
         }
-        .info .label { font-weight: bold; color: #666; }
-        .info .value { color: #333; font-family: monospace; }
-        .status {
-            font-size: 18px; font-weight: bold; padding: 10px;
-            border-radius: 10px; margin: 15px 0;
+        .coupon-header .brand {
+            font-size: 26px; font-weight: bold; color: white;
+            text-shadow: 2px 2px 0 #a71d2a;
         }
-        .status.valid { background: #d4edda; color: #155724; }
-        .status.used { background: #f8d7da; color: #721c24; }
-        button {
-            width: 100%; padding: 16px; border: none; border-radius: 30px;
-            font-size: 18px; font-weight: bold; cursor: pointer; margin: 8px 0;
+        .coupon-header .brand-en {
+            font-size: 12px; color: #ffcccc; display: block; letter-spacing: 2px;
         }
-        .btn-redeem { background: #e63946; color: white; }
-        .btn-redeem:disabled { background: #aaa; cursor: not-allowed; }
-        .btn-back { background: #ddd; color: #333; }
-        .result { font-size: 16px; font-weight: bold; margin-top: 15px; }
-        .success { color: #27ae60; }
-        .fail { color: #e74c3c; }
+        .coupon-header .title {
+            font-size: 38px; font-weight: 900; color: #FFD700;
+            margin: 8px 0 4px; text-shadow: 2px 2px 0 #b8860b;
+        }
+        .coupon-header .title-en {
+            font-size: 14px; color: #ffeeba; display: block;
+        }
+        .discount-badge {
+            display: flex; align-items: center; justify-content: center;
+            background: #FFD700; color: #c0392b;
+            width: 90px; height: 90px; border-radius: 50%;
+            position: absolute; top: 50%; right: 18px;
+            transform: translateY(-50%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            flex-direction: column; line-height: 1;
+        }
+        .discount-badge .percent { font-size: 38px; font-weight: 900; }
+        .discount-badge .off-text { font-size: 13px; font-weight: bold; }
+        .coupon-body {
+            padding: 20px 25px 10px;
+        }
+        .coupon-body .drink-icon { font-size: 36px; margin-bottom: 6px; }
+        .coupon-body .offer-cn {
+            font-size: 20px; font-weight: bold; color: #c0392b;
+        }
+        .coupon-body .offer-en {
+            font-size: 13px; color: #888; display: block; margin: 4px 0 10px;
+        }
+        .coupon-body .detail {
+            font-size: 13px; color: #555; line-height: 1.7;
+            text-align: left; background: #fff8f8;
+            border-radius: 12px; padding: 12px 16px; margin: 10px 0;
+        }
+        .coupon-body .detail .en { color: #999; font-size: 11px; }
+        .qr-section { padding: 8px 25px 12px; text-align: center; }
+        .qr-section .qr-label {
+            font-size: 13px; font-weight: bold; color: #c0392b; margin-bottom: 6px;
+        }
+        .qr-section .qr-label-en { font-size: 10px; color: #999; display: block; }
+        #qrcode {
+            display: inline-block; padding: 8px; background: white;
+            border: 2px solid #ff4d4d; border-radius: 12px;
+        }
+        #qrcode img { display: block; width: 120px; height: 120px; }
+        .zigzag-container {
+            position: relative; height: 18px; background: white; overflow: hidden;
+        }
+        .zigzag-container::before {
+            content: ''; position: absolute; top: -9px; left: -10px;
+            width: calc(100% + 20px); height: 18px;
+            background: 
+                radial-gradient(circle at 0 100%, transparent 9px, white 9px) 0 0,
+                radial-gradient(circle at 9px 100%, transparent 9px, white 9px) 9px 0;
+            background-size: 18px 18px;
+        }
+        .coupon-footer {
+            padding: 16px 20px; background: #fff5f5;
+            border-top: 2px dashed #ffcccc;
+        }
+        .coupon-footer .store {
+            font-size: 15px; font-weight: bold; color: #c0392b;
+        }
+        .coupon-footer .store-en { font-size: 11px; color: #999; display: block; }
+        .coupon-footer .validity {
+            display: inline-block; background: #ffe0e0; color: #c0392b;
+            font-size: 13px; font-weight: bold; padding: 6px 14px;
+            border-radius: 20px; margin: 8px 0;
+        }
+        .coupon-footer .validity-en {
+            font-size: 10px; color: #999; display: block; margin: 2px 0 4px;
+        }
+        .coupon-footer .coupon-id {
+            font-family: 'Courier New', monospace;
+            font-size: 11px; color: #aaa; margin-top: 4px;
+        }
+        .coupon-footer .note {
+            font-size: 11px; color: #aaa; margin-top: 6px;
+        }
+        /* 状态标签 */
+        .status-badge {
+            display: inline-block; padding: 5px 14px; border-radius: 15px;
+            font-size: 12px; font-weight: bold; margin-top: 4px;
+        }
+        .status-valid { background: #d4edda; color: #155724; }
+        .status-used { background: #f8d7da; color: #721c24; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">🍦 蜜雪冰城 · 优惠核销</div>
-        <div class="info">
-            <p><span class="label">券 ID：</span><span class="value" id="couponId">-</span></p>
-            <p><span class="label">折扣：</span><span class="value" id="discount">-</span></p>
-            <p><span class="label">有效期至：</span><span class="value" id="expire">-</span></p>
+
+    <div class="coupon" id="couponMain">
+        <!-- 顶部 -->
+        <div class="coupon-header">
+            <span class="brand">🍦 蜜雪冰城</span>
+            <span class="brand-en">MIXUE ICE CREAM & TEA</span>
+            <div class="title">全场 8 折</div>
+            <span class="title-en">20% OFF Entire Order</span>
+            <div class="discount-badge">
+                <span class="percent">20</span>
+                <span class="off-text">% OFF</span>
+            </div>
         </div>
-        <div class="status valid" id="statusDisplay">✅ 优惠券有效 | Valid</div>
-        <button class="btn-redeem" id="redeemBtn" onclick="redeem()">
-            ✅ 确认核销 | Confirm Redemption
-        </button>
-        <button class="btn-back" onclick="history.back()">
-            ← 返回 | Back
-        </button>
-        <div class="result" id="resultMsg"></div>
+
+        <!-- 中间 -->
+        <div class="coupon-body">
+            <div class="drink-icon">🧊🍋🫧🍦</div>
+            <div class="offer-cn">全场消费 · 享 8 折优惠</div>
+            <span class="offer-en">20% OFF Your Entire Purchase</span>
+            <div class="detail">
+                ✅ 全店饮品、冰淇淋均可使用<br>
+                <span class="en">Valid on all drinks & ice cream</span><br><br>
+                ✅ 整单折扣，不限杯数<br>
+                <span class="en">Discount applies to entire order</span><br><br>
+                ✅ 每单限用一张，不可与其他优惠叠加<br>
+                <span class="en">One per order. Cannot combine with other promos</span>
+            </div>
+        </div>
+
+        <!-- 二维码 -->
+        <div class="qr-section">
+            <div class="qr-label">📱 店员扫码核销</div>
+            <span class="qr-label-en">Staff Scan to Redeem</span>
+            <div id="qrcode"></div>
+            <div id="statusDisplay">
+                <span class="status-badge status-valid" id="statusBadge">✅ 有效 Valid</span>
+            </div>
+        </div>
+
+        <!-- 锯齿分隔 -->
+        <div class="zigzag-container"></div>
+
+        <!-- 底部 -->
+        <div class="coupon-footer">
+            <div class="store">📍 蜜雪冰城 · Toa Payoh Central</div>
+            <span class="store-en">MIXUE · Toa Payoh Central</span>
+            <br>
+            <div class="validity" id="validDate"></div>
+            <span class="validity-en" id="validDateEN"></span>
+            <br>
+            <div class="coupon-id" id="couponId"></div>
+            <div class="note">
+                📸 请截图保存 · 到店出示扫码<br>
+                <span style="font-size:10px">Screenshot & show QR code in store</span>
+            </div>
+        </div>
     </div>
 
     <script>
-        // 从 URL 读取参数
-        const params = new URLSearchParams(window.location.search);
-        const couponId = params.get('id') || '-';
-        const discount = (params.get('discount') || '20%').replace('%25', '%');
-        const expire = params.get('expire') || '-';
+        // ========== 配置区 ==========
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxjih0loF7-yix0KvYIdUY1IHlCCmxKrV8JzMDwJcUbBWbDOot9PyBju8y2_Lrl3iAY/exec'; // 👈 替换成你的 Google Apps Script 网址
+        const VALID_DAYS = 7;
+        // ===========================
 
-        document.getElementById('couponId').textContent = couponId;
-        document.getElementById('discount').textContent = discount;
-        document.getElementById('expire').textContent = expire;
+        function generateCouponId() {
+            const now = new Date();
+            const ts = now.getTime().toString(36).toUpperCase();
+            const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
+            return 'MX-' + ts.slice(-6) + '-' + rand;
+        }
 
-        // 检查是否已核销
+        const couponId = generateCouponId();
+        document.getElementById('couponId').textContent = 'ID: ' + couponId;
+
+        // 有效期
+        const now = new Date();
+        const endDate = new Date(now);
+        endDate.setDate(endDate.getDate() + VALID_DAYS);
+        const yearS = now.getFullYear();
+        const monthS = String(now.getMonth() + 1).padStart(2, '0');
+        const dayS = String(now.getDate()).padStart(2, '0');
+        const yearE = endDate.getFullYear();
+        const monthE = String(endDate.getMonth() + 1).padStart(2, '0');
+        const dayE = String(endDate.getDate()).padStart(2, '0');
+
+        document.getElementById('validDate').textContent = 
+            `📅 ${yearS}/${monthS}/${dayS} - ${yearE}/${monthE}/${dayE}`;
+        document.getElementById('validDateEN').textContent = 
+            `Valid: ${yearS}-${monthS}-${dayS} to ${yearE}-${monthE}-${dayE}`;
+
+        // ========== 生成核销链接二维码 ==========
+        // 二维码内容：店员扫码后跳转的核销页面
+        const redeemURL = SCRIPT_URL + 
+            '?action=check&id=' + couponId +
+            '&discount=20%25' +
+            '&expire=' + yearE + '-' + monthE + '-' + dayE;
+
+        // 生成二维码（指向核销链接）
+        new QRCode(document.getElementById('qrcode'), {
+            text: redeemURL,
+            width: 120,
+            height: 120,
+            colorDark: '#c0392b',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.M
+        });
+
+        // ========== 页面加载时检查是否已核销 ==========
         async function checkStatus() {
             try {
                 const resp = await fetch(SCRIPT_URL + '?action=check&id=' + couponId);
                 const data = await resp.json();
                 if (data.status === 'used') {
-                    document.getElementById('statusDisplay').textContent = '❌ 此券已核销过 | Already Redeemed';
-                    document.getElementById('statusDisplay').className = 'status used';
-                    document.getElementById('redeemBtn').disabled = true;
-                    document.getElementById('redeemBtn').textContent = '已核销 | Redeemed';
+                    document.getElementById('statusBadge').textContent = '❌ 已使用 Used';
+                    document.getElementById('statusBadge').className = 'status-badge status-used';
+                    document.getElementById('qrcode').style.opacity = '0.4';
                 }
             } catch (e) {
-                console.log('状态检查失败');
-            }
-        }
-
-        async function redeem() {
-            const btn = document.getElementById('redeemBtn');
-            const msg = document.getElementById('resultMsg');
-            btn.disabled = true;
-            btn.textContent = '核销中... | Processing...';
-
-            try {
-                const resp = await fetch(SCRIPT_URL + '?action=redeem&id=' + couponId + '&discount=' + encodeURIComponent(discount) + '&expire=' + expire);
-                const data = await resp.json();
-                if (data.success) {
-                    msg.textContent = '✅ 核销成功！| Redeemed Successfully!';
-                    msg.className = 'result success';
-                    document.getElementById('statusDisplay').textContent = '✅ 已核销 | Redeemed';
-                    document.getElementById('statusDisplay').className = 'status valid';
-                    btn.textContent = '已核销 | Redeemed';
-                } else {
-                    msg.textContent = '❌ ' + (data.reason || '核销失败 | Failed');
-                    msg.className = 'result fail';
-                    btn.disabled = false;
-                    btn.textContent = '重试 | Retry';
-                }
-            } catch (e) {
-                msg.textContent = '❌ 网络错误 | Network Error';
-                msg.className = 'result fail';
-                btn.disabled = false;
-                btn.textContent = '重试 | Retry';
+                console.log('状态检查暂不可用');
             }
         }
 
         checkStatus();
+
+        // ========== 定期刷新状态（每30秒检查一次） ==========
+        setInterval(checkStatus, 30000);
     </script>
 </body>
 </html>
