@@ -61,18 +61,16 @@
     </div>
 
     <script>
-        // 从 URL 读取参数
         const params = new URLSearchParams(window.location.search);
         const couponId = params.get('id') || '-';
         const discount = (params.get('discount') || '20%').replace('%25', '%');
         const expire = params.get('expire') || '-';
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxjih0loF7-yix0KvYIdUY1IHlCCmxKrV8JzMDwJcUbBWbDOot9PyBju8y2_Lrl3iAY/exec'; // 👈 替换成你的 Google Apps Script 网址
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxjih0loF7-yix0KvYIdUY1IHlCCmxKrV8JzMDwJcUbBWbDOot9PyBju8y2_Lrl3iAY/exec';
 
         document.getElementById('couponId').textContent = couponId;
         document.getElementById('discount').textContent = discount;
         document.getElementById('expire').textContent = expire;
 
-        // 检查是否已核销
         async function checkStatus() {
             try {
                 const resp = await fetch(SCRIPT_URL + '?action=check&id=' + couponId);
